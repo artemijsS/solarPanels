@@ -51,11 +51,7 @@ const HomePage = () => {
     }
 
     const setRoof = (e) => {
-        if (e.target.value === 'flat') {
-            setForm({...form, roof: e.target.value, angle: 0})
-        } else {
-            setForm({...form, roof: e.target.value, angle: 15})
-        }
+        setForm({...form, roof: e.target.value, angle: 15})
     }
 
     const setAngle = (e) => {
