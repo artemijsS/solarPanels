@@ -1,0 +1,173 @@
+import React, {useEffect, useState} from "react"
+
+const HomePage = () => {
+    const [form, setForm] = useState({
+        kwh: 3600,
+        roof: 'slope',
+        angle: 15,
+        compass: 'South'
+    })
+
+    const [panCount, setPanCount] = useState(null)
+    const [panSquare, setPanSquare] = useState(null)
+    const [panPower, setPanPower] = useState(null)
+    const [panPowerYear, setPanPowerYear] = useState(null)
+
+    const onlyNumeric = (e) => {
+        if (e.target.value === '' || !(!isNaN(parseFloat(e.target.value)) && isFinite(e.target.value))) {
+            e.target.value = ''
+        }
+    }
+
+    useEffect(() => {
+        console.log(form)
+        let _count = form.kwh / 0.4 / 1000
+        const count = Number.isInteger(_count) ? _count + 1 : Math.round(_count)
+        const power = count * 0.4
+        setPanCount(count)
+        setPanSquare(Math.round(count * 1.922))
+        setPanPower(power)
+        setPanPowerYear(I * Ko[form.compass][form.angle] * power * 0.9)
+    }, [form])
+
+    const setPower = (e) => {
+        onlyNumeric(e)
+        setForm({...form, kwh: parseInt(e.target.value)})
+    }
+
+    const validation = (e) => {
+        if (e.target.value < 3600) {
+            e.target.value = 3600
+            setForm({...form, kwh: 3600})
+        }
+        if (e.target.value > 15000) {
+            e.target.value = 15000
+            setForm({...form, kwh: 15000})
+        }
+    }
+
+    const setRoof = (e) => {
+        if (e.target.value === 'flat') {
+            setForm({...form, roof: e.target.value, angle: 0})
+        } else {
+            setForm({...form, roof: e.target.value, angle: 15})
+        }
+    }
+
+    const setAngle = (e) => {
+        setForm({...form, angle: parseInt(e.target.value)})
+    }
+
+    const setCompass = (e) => {
+        setForm({...form, compass: e.target.value})
+    }
+
+    return (
+        <div className="App App-header">
+            <input type="text" onChange={setPower} onBlur={validation} defaultValue={form.kwh}/>
+            <select name="roof" id="roof" onChange={setRoof}>
+                <option value="slope">Двускатная</option>
+                <option value="flat">Плоская</option>
+            </select>
+            {form.roof === 'slope' &&
+                <select name="angle" id="angle" onChange={setAngle}>
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                    <option value="60">60</option>
+                </select>
+            }
+            <select name="compass" id="compass" onChange={setCompass}>
+                <option value="South">Юг</option>
+                <option value="North">Север</option>
+                <option value="West">Запад</option>
+                <option value="East">Восток</option>
+                <option value="Southeast">Юго-восток</option>
+                <option value="Southwest">Юго-запад</option>
+                <option value="Northwest">Северо-запад</option>
+                <option value="Northeast">Северо-восток</option>
+            </select>
+            <div className="results">
+                <div className="result-line">
+                    <div className="title">Количество солнечных панелей</div>
+                    <div className="value">{panCount} штук</div>
+                </div>
+                <div className="result-line">
+                    <div className="title">Mесто, необходимое для установки солнечных панелей</div>
+                    <div className="value">{panSquare} м²</div>
+                </div>
+                <div className="result-line">
+                    <div className="title">Мощность системы солнечной электроэнергии</div>
+                    <div className="value">{panPower} кВт</div>
+                </div>
+                <div className="result-line">
+                    <div className="title">Годовое производство солнечной электроэнергии</div>
+                    <div className="value">{panPowerYear} кВтч</div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+export default HomePage;
+
+const I = 950 //http://ru.sinergo.lv/potencial-solnechnoj-energii/
+
+const Ko = { //https://termoteh.in.ua/article/gde-mozhno-ustanavlivat-solnechnye-batarei
+    'South': {
+        0: 1,
+        15: 1.1,
+        30: 1.13,
+        45: 1.12,
+        60: 1.06
+    },
+    'North': {
+        0: 1,
+        15: 1,
+        30: 1,
+        45: 1,
+        60: 1
+    },
+    'West': {
+        0: 1,
+        15: 0.98,
+        30: 0.94,
+        45: 0.88,
+        60: 0.82
+    },
+    'East': {
+        0: 1,
+        15: 0.98,
+        30: 0.94,
+        45: 0.88,
+        60: 0.82
+    },
+    'Southeast': {
+        0: 1,
+        15: 1.06,
+        30: 1.08,
+        45: 1.06,
+        60: 1
+    },
+    'Southwest': {
+        0: 1,
+        15: 1.06,
+        30: 1.08,
+        45: 1.06,
+        60: 1
+    },
+    'Northwest': {
+        0: 1,
+        15: 1,
+        30: 1,
+        45: 1,
+        60: 1
+    },
+    'Northeast': {
+        0: 1,
+        15: 1,
+        30: 1,
+        45: 1,
+        60: 1
+    }
+}
