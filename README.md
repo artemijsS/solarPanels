@@ -1,2 +1,2 @@
-SolarPanels
+# SolarPanels
 Artemijs Semjaņņikovs
