@@ -1,4 +1,6 @@
 import React, {useEffect, useState} from "react"
+// import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { MonthKwh } from '../components'
 
 const HomePage = () => {
     const [form, setForm] = useState({
@@ -12,6 +14,8 @@ const HomePage = () => {
     const [panSquare, setPanSquare] = useState(null)
     const [panPower, setPanPower] = useState(null)
     const [panPowerYear, setPanPowerYear] = useState(null)
+    const [price, setPrice] = useState(null)
+    // const [dataMonthKwh, setDataMonthKwh] = useState([{name: 'Январь',kWh: 0,},{name: 'Февраль',kWh: 0,},{name: 'Март',kWh: 0,},{name: 'Апрель',kWh: 0,},{name: 'Май',kWh: 0,},{name: 'Июнь',kWh: 0,},{name: 'Июль',kWh: 0,},{name: 'Август',kWh: 0,},{name: 'Сентябрь',kWh: 0,},{name: 'Октябрь',kWh: 0,},{name: 'Ноябрь',kWh: 0,},{name: 'Декабрь',kWh: 0,}])
 
     const onlyNumeric = (e) => {
         if (e.target.value === '' || !(!isNaN(parseFloat(e.target.value)) && isFinite(e.target.value))) {
@@ -29,6 +33,12 @@ const HomePage = () => {
         setPanSquare(Math.round(count * 1.922))
         setPanPower(Math.round(power * 100) / 100)
         setPanPowerYear(Math.round(I * Ko[form.compass][form.angle] * power * 0.9))
+        setPrice(Math.round(power*1250))
+
+        monthData.map((month, i) => {
+            month.kWh = Math.round((monthKoef[i] * Math.round(count * 1.922)) * power)
+        })
+
     }, [form])
 
     const setPower = (e) => {
@@ -53,6 +63,8 @@ const HomePage = () => {
     const setRoof = (e) => {
         if (e.target.value === 'flat') {
             setForm({...form, roof: e.target.value, angle: 10})
+        } else if (e.target.value === 'ground') {
+            setForm({...form, roof: e.target.value, angle: 55})
         } else {
             setForm({...form, roof: e.target.value, angle: 15})
         }
@@ -72,6 +84,7 @@ const HomePage = () => {
             <select name="roof" id="roof" onChange={setRoof}>
                 <option value="slope">Двускатная</option>
                 <option value="flat">Плоская</option>
+                <option value="ground">Площадь участка</option>
             </select>
             {form.roof === 'slope' &&
                 <select name="angle" id="angle" onChange={setAngle}>
@@ -108,6 +121,13 @@ const HomePage = () => {
                     <div className="title">Годовое производство солнечной электроэнергии</div>
                     <div className="value">{panPowerYear} кВтч</div>
                 </div>
+                <div className="result-line">
+                    <div className="title">Цена</div>
+                    <div className="value">{price} EUR</div>
+                </div>
+                <div className="result-line diagram">
+                    <MonthKwh data={monthData}/>
+                </div>
             </div>
         </div>
     );
@@ -123,20 +143,23 @@ const Ko = { //https://termoteh.in.ua/article/gde-mozhno-ustanavlivat-solnechnye
         15: 1.1,
         30: 1.13,
         45: 1.12,
+        55: 1.06,
         60: 1.06
     },
     'North': {
-        10: 1,
-        15: 1,
-        30: 1,
-        45: 1,
-        60: 1
+        10: 0.95,
+        15: 0.93,
+        30: 0.77,
+        45: 0.65,
+        55: 0.51,
+        60: 0.42
     },
     'West': {
         10: 0.99,
         15: 0.98,
         30: 0.94,
         45: 0.88,
+        55: 0.85,
         60: 0.82
     },
     'East': {
@@ -144,6 +167,7 @@ const Ko = { //https://termoteh.in.ua/article/gde-mozhno-ustanavlivat-solnechnye
         15: 0.98,
         30: 0.94,
         45: 0.88,
+        55: 0.85,
         60: 0.82
     },
     'Southeast': {
@@ -151,6 +175,7 @@ const Ko = { //https://termoteh.in.ua/article/gde-mozhno-ustanavlivat-solnechnye
         15: 1.06,
         30: 1.08,
         45: 1.06,
+        55: 1.02,
         60: 1
     },
     'Southwest': {
@@ -158,20 +183,76 @@ const Ko = { //https://termoteh.in.ua/article/gde-mozhno-ustanavlivat-solnechnye
         15: 1.06,
         30: 1.08,
         45: 1.06,
+        55: 1.02,
         60: 1
     },
     'Northwest': {
-        10: 1,
-        15: 1,
-        30: 1,
-        45: 1,
-        60: 1
+        10: 0.96,
+        15: 0.94,
+        30: 0.79,
+        45: 0.72,
+        55: 0.64,
+        60: 0.55
     },
     'Northeast': {
-        10: 1,
-        15: 1,
-        30: 1,
-        45: 1,
-        60: 1
+        10: 0.96,
+        15: 0.94,
+        30: 0.79,
+        45: 0.72,
+        55: 0.63,
+        60: 0.55
     }
 }
+
+const monthKoef = [20.6,53,108.4,127.6,166.3,163,167.7,145.0,104.6,60.7,34.8,22.0,1173.7]
+
+const monthData = [
+    {
+        name: 'Январь',
+        kWh: 4000,
+    },
+    {
+        name: 'Февраль',
+        kWh: 3000,
+    },
+    {
+        name: 'Март',
+        kWh: 2000,
+    },
+    {
+        name: 'Апрель',
+        kWh: 2780,
+    },
+    {
+        name: 'Май',
+        kWh: 1890,
+    },
+    {
+        name: 'Июнь',
+        kWh: 2390,
+    },
+    {
+        name: 'Июль',
+        kWh: 3490,
+    },
+    {
+        name: 'Август',
+        kWh: 3490,
+    },
+    {
+        name: 'Сентябрь',
+        kWh: 3490,
+    },
+    {
+        name: 'Октябрь',
+        kWh: 3490,
+    },
+    {
+        name: 'Ноябрь',
+        kWh: 3490,
+    },
+    {
+        name: 'Декабрь',
+        kWh: 3490,
+    }
+];

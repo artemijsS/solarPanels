@@ -52,3 +52,8 @@ code {
   display: flex;
   justify-content: space-between;
 }
+
+.diagram {
+  margin-top: 50px;
+  height: 500px;
+}
