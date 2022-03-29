@@ -21,18 +21,22 @@ const HomePage = () => {
 
     useEffect(() => {
         console.log(form)
+        if (form.kwh < 3600 || form.kwh > 15000) return
         let _count = form.kwh / 0.4 / 1000
         const count = Number.isInteger(_count) ? _count + 1 : Math.round(_count)
         const power = count * 0.4
         setPanCount(count)
         setPanSquare(Math.round(count * 1.922))
-        setPanPower(power)
-        setPanPowerYear(I * Ko[form.compass][form.angle] * power * 0.9)
+        setPanPower(Math.round(power * 100) / 100)
+        setPanPowerYear(Math.round(I * Ko[form.compass][form.angle] * power * 0.9))
     }, [form])
 
     const setPower = (e) => {
         onlyNumeric(e)
-        setForm({...form, kwh: parseInt(e.target.value)})
+        if (e.target.value === '')
+            setForm({...form, kwh: 0})
+        else
+            setForm({...form, kwh: parseInt(e.target.value)})
     }
 
     const validation = (e) => {
