@@ -51,7 +51,11 @@ const HomePage = () => {
     }
 
     const setRoof = (e) => {
-        setForm({...form, roof: e.target.value, angle: 15})
+        if (e.target.value === 'flat') {
+            setForm({...form, roof: e.target.value, angle: 10})
+        } else {
+            setForm({...form, roof: e.target.value, angle: 15})
+        }
     }
 
     const setAngle = (e) => {
@@ -115,56 +119,56 @@ const I = 950 //http://ru.sinergo.lv/potencial-solnechnoj-energii/
 
 const Ko = { //https://termoteh.in.ua/article/gde-mozhno-ustanavlivat-solnechnye-batarei
     'South': {
-        0: 1,
+        10: 1.07,
         15: 1.1,
         30: 1.13,
         45: 1.12,
         60: 1.06
     },
     'North': {
-        0: 1,
+        10: 1,
         15: 1,
         30: 1,
         45: 1,
         60: 1
     },
     'West': {
-        0: 1,
+        10: 0.99,
         15: 0.98,
         30: 0.94,
         45: 0.88,
         60: 0.82
     },
     'East': {
-        0: 1,
+        10: 0.99,
         15: 0.98,
         30: 0.94,
         45: 0.88,
         60: 0.82
     },
     'Southeast': {
-        0: 1,
+        10: 1.05,
         15: 1.06,
         30: 1.08,
         45: 1.06,
         60: 1
     },
     'Southwest': {
-        0: 1,
+        10: 1.05,
         15: 1.06,
         30: 1.08,
         45: 1.06,
         60: 1
     },
     'Northwest': {
-        0: 1,
+        10: 1,
         15: 1,
         30: 1,
         45: 1,
         60: 1
     },
     'Northeast': {
-        0: 1,
+        10: 1,
         15: 1,
         30: 1,
         45: 1,
