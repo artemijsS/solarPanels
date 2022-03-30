@@ -27,7 +27,7 @@ const MonthKwh = ({ data }) => {
             >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" fontSize={20} />
-                <YAxis fontSize={20} domain={['auto', 'auto']}/>
+                <YAxis fontSize={20} domain={['auto', 'dataMax + 100']}/>
                 <Tooltip />
                 <Legend />
                 <Bar dataKey="kWh" fill="#8884d8" />

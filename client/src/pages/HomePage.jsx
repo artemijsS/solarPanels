@@ -36,7 +36,8 @@ const HomePage = () => {
         setPrice(Math.round(power*1250))
 
         monthData.map((month, i) => {
-            month.kWh = Math.round((monthKoef[i] * Math.round(count * 1.922)) * power)
+            // month.kWh = Math.round(((monthKoef[i] * Math.round(count * 1.922)) * power)/100)
+            month.kWh = Math.round(monthKoef[i] * (I * Ko[form.compass][form.angle] * power * 0.9) * 100) / 100
         })
 
     }, [form])
@@ -204,7 +205,9 @@ const Ko = { //https://termoteh.in.ua/article/gde-mozhno-ustanavlivat-solnechnye
     }
 }
 
-const monthKoef = [20.6,53,108.4,127.6,166.3,163,167.7,145.0,104.6,60.7,34.8,22.0,1173.7]
+//[20.6,53,108.4,127.6,166.3,163,167.7,145.0,104.6,60.7,34.8,22.0,1173.7]
+
+const monthKoef = [0.004,0.016,0.08,0.15,0.175,0.18,0.17,0.14,0.09,0.033,0.0055,0.0013]
 
 const monthData = [
     {
